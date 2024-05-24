@@ -11,4 +11,5 @@ type TemplData struct {
 	Title string
 	Langs []string
 	Body  template.HTML
+	Theme string
 }
