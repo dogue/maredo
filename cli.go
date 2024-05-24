@@ -42,7 +42,6 @@ func initCli() cli.App {
 			},
 			&cli.StringFlag{
 				Name:        "theme",
-				Aliases:     []string{"t"},
 				Usage:       "set CSS theme (see https://github.com/dogue/maredo/themes)",
 				Value:       "default",
 				Destination: &data.Theme,
