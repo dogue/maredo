@@ -13,3 +13,10 @@ function doStuff(a, b) {
     return(a + b);
 }
 ```
+---
+
+```c
+int main() {
+    return 0;
+}
+```

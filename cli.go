@@ -41,10 +41,16 @@ func initCli() cli.App {
 				},
 			},
 			&cli.StringFlag{
-				Name:        "theme",
+				Name:        "page-theme",
 				Usage:       "set CSS theme (see https://github.com/dogue/maredo/themes)",
 				Value:       "default",
-				Destination: &data.Theme,
+				Destination: &data.PageTheme,
+			},
+			&cli.StringFlag{
+				Name:        "syntax-theme",
+				Usage:       "set syntax highlighting theme (see Highlight.js for available themes)",
+				Value:       "github-dark",
+				Destination: &data.SyntaxTheme,
 			},
 		},
 		Action: func(ctx *cli.Context) error { return nil },
