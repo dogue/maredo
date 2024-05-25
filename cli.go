@@ -60,10 +60,13 @@ func run() {
 				Destination: &SELECTED_THEME,
 			},
 			&cli.StringFlag{
-				Name:        "syntax-theme",
-				Usage:       "set syntax highlighting theme (see Highlight.js for available themes)",
-				Value:       "github-dark",
-				Destination: &DATA.SyntaxTheme,
+				Name:  "syntax-theme",
+				Usage: "set syntax highlighting theme (see Highlight.js for available themes)",
+				Value: "github-dark",
+				Action: func(ctx *cli.Context, s string) error {
+					DATA.SyntaxTheme = strings.TrimSuffix(s, ".css")
+					return nil
+				},
 			},
 			&cli.BoolFlag{
 				Name:  "list-themes",
