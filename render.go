@@ -3,13 +3,21 @@ package main
 import (
 	"bytes"
 	_ "embed"
-	bf "github.com/russross/blackfriday/v2"
 	"html/template"
 	"os"
+
+	bf "github.com/russross/blackfriday/v2"
 )
 
 //go:embed template.html
 var TEMPLATE string
+var compiledTempl *template.Template
+
+func initTemplate() error {
+	compiledTempl = template.New("maredo")
+	_, err := compiledTempl.Parse(TEMPLATE)
+	return err
+}
 
 func renderPage(filename string, templData TemplData) (out string, err error) {
 	file, err := os.ReadFile(filename)
@@ -18,9 +26,9 @@ func renderPage(filename string, templData TemplData) (out string, err error) {
 	}
 	html := bf.Run(file)
 	templData.Body = template.HTML(html)
-	t := template.New("main")
-	t.Parse(TEMPLATE)
 	buf := bytes.Buffer{}
-	t.Execute(&buf, templData)
+	compiledTempl.Execute(&buf, templData)
 	return buf.String(), nil
 }
+
+// func renderDir(dir string, templData TemplData)

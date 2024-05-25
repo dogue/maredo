@@ -9,6 +9,7 @@ const VERSION = "0.0.1"
 func main() {
 	app := initCli()
 	_ = app
+	initTemplate()
 	html, _ := renderPage(sourceFile, data)
 	fmt.Printf("%s\n", html)
 }

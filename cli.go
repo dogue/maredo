@@ -16,11 +16,12 @@ func initCli() cli.App {
 		Usage:     "render a markdown file to static HTML",
 		Version:   VERSION,
 		Copyright: "©️ 2024 dogue <https://github.com/dogue>",
+		UsageText: "maredo [options]",
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:        "input",
 				Aliases:     []string{"i"},
-				Usage:       "render `FILE` to HTML",
+				Usage:       "render `SOURCE` file or directory to HTML",
 				Value:       "README.md",
 				Destination: &sourceFile,
 			},
@@ -34,7 +35,7 @@ func initCli() cli.App {
 			&cli.StringSliceFlag{
 				Name:    "lang",
 				Aliases: []string{"l"},
-				Usage:   "set highlighting languages to be included (see Highlight.js for available languages)",
+				Usage:   "include syntax highlighting stylesheet for `LANG` (see Highlight.js for available languages)",
 				Action: func(ctx *cli.Context, s []string) error {
 					data.Langs = s
 					return nil
