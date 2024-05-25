@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"log"
@@ -8,7 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 func run() {
@@ -16,7 +17,7 @@ func run() {
 	cwd, _ := os.Getwd()
 	cwd = filepath.Base(cwd)
 
-	app := cli.App{
+	app := &cli.Command{
 		Name:      "maredo",
 		Usage:     "render a markdown file to static HTML",
 		Version:   VERSION,
@@ -48,7 +49,7 @@ func run() {
 				Name:    "lang",
 				Aliases: []string{"l"},
 				Usage:   "include syntax highlighting stylesheet for `LANG` (see Highlight.js for available languages)",
-				Action: func(ctx *cli.Context, s []string) error {
+				Action: func(ctx context.Context, c *cli.Command, s []string) error {
 					DATA.Langs = s
 					return nil
 				},
@@ -64,16 +65,15 @@ func run() {
 				Usage:       "set syntax highlighting theme (see Highlight.js for available themes)",
 				Value:       "github-dark",
 				Destination: &DATA.SyntaxTheme,
-				Action: func(ctx *cli.Context, s string) error {
+				Action: func(ctx context.Context, cmd *cli.Command, s string) error {
 					DATA.SyntaxTheme = strings.TrimSuffix(s, ".css")
 					return nil
 				},
 			},
 			&cli.BoolFlag{
-				Name:               "list-themes",
-				Usage:              "list built-in CSS themes",
-				DisableDefaultText: true,
-				Action: func(ctx *cli.Context, b bool) error {
+				Name:  "list-themes",
+				Usage: "list built-in CSS themes",
+				Action: func(ctx context.Context, cmd *cli.Command, b bool) error {
 					themeList, err := THEMES.ReadDir("themes")
 					if err != nil {
 						return err
@@ -91,7 +91,7 @@ func run() {
 				},
 			},
 		},
-		Action: func(ctx *cli.Context) error {
+		Action: func(ctx context.Context, cmd *cli.Command) error {
 			if err := initTemplate(); err != nil {
 				return err
 			}
@@ -109,7 +109,7 @@ func run() {
 		},
 	}
 
-	if err := app.Run(os.Args); err != nil {
+	if err := app.Run(context.Background(), os.Args); err != nil {
 		log.Fatal(err)
 	}
 }
