@@ -6,7 +6,7 @@ import (
 
 var data TemplData
 var sourceFile string
-var outputFile string
+var outputPath string
 
 type TemplData struct {
 	Title       string

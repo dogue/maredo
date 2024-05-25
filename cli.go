@@ -1,13 +1,17 @@
 package main
 
 import (
-	"github.com/urfave/cli/v2"
+	"errors"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/urfave/cli/v2"
 )
 
-func initCli() cli.App {
+func run() {
+	// get current dir for default rendered page title
 	cwd, _ := os.Getwd()
 	cwd = filepath.Base(cwd)
 
@@ -21,16 +25,16 @@ func initCli() cli.App {
 			&cli.StringFlag{
 				Name:        "input",
 				Aliases:     []string{"i"},
-				Usage:       "render `SOURCE` file or directory to HTML",
+				Usage:       "render markdown `FILE` to HTML",
 				Value:       "README.md",
 				Destination: &sourceFile,
 			},
 			&cli.StringFlag{
 				Name:        "output",
 				Aliases:     []string{"o"},
-				Usage:       "output rendered files to `PATH`",
+				Usage:       "save output to `PATH`",
 				Value:       "docs",
-				Destination: &outputFile,
+				Destination: &outputPath,
 			},
 			&cli.StringFlag{
 				Name:        "title",
@@ -61,12 +65,25 @@ func initCli() cli.App {
 				Destination: &data.SyntaxTheme,
 			},
 		},
-		Action: func(ctx *cli.Context) error { return nil },
+		Action: func(ctx *cli.Context) error {
+			if err := initTemplate(); err != nil {
+				return err
+			}
+
+			if err := renderPage(); err != nil {
+				if errors.Is(err, os.ErrNotExist) {
+					fmt.Printf("Could not locate file `%s`\n", sourceFile)
+					os.Exit(1)
+				}
+
+				return err
+			}
+
+			return exportCSS()
+		},
 	}
 
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
 	}
-
-	return app
 }

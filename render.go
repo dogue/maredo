@@ -2,9 +2,11 @@ package main
 
 import (
 	"bytes"
-	_ "embed"
+	"embed"
 	"html/template"
+	"io/fs"
 	"os"
+	"path/filepath"
 
 	bf "github.com/russross/blackfriday/v2"
 )
@@ -13,8 +15,8 @@ import (
 var TEMPLATE string
 var compiledTempl *template.Template
 
-//go:embed themes/default.css
-var DEFAULT_CSS string
+//go:embed themes/*
+var THEMES_FS embed.FS
 
 func initTemplate() error {
 	compiledTempl = template.New("maredo")
@@ -22,16 +24,29 @@ func initTemplate() error {
 	return err
 }
 
-func renderPage(filename string, templData TemplData) (out []byte, err error) {
-	file, err := os.ReadFile(filename)
+func renderPage() error {
+	file, err := os.ReadFile(sourceFile)
 	if err != nil {
-		return []byte{}, err
+		return err
 	}
+
 	html := bf.Run(file)
-	templData.Body = template.HTML(html)
+	data.Body = template.HTML(html)
 	buf := bytes.Buffer{}
-	compiledTempl.Execute(&buf, templData)
-	return buf.Bytes(), nil
+	if err = compiledTempl.Execute(&buf, data); err != nil {
+		return err
+	}
+
+	outFile := filepath.Join(outputPath, "index.html")
+	return os.WriteFile(outFile, buf.Bytes(), fs.ModePerm)
 }
 
-// func renderDir(dir string, templData TemplData)
+func exportCSS() error {
+	themeFile := filepath.Join("themes", data.PageTheme+".css")
+	themeData, err := THEMES_FS.ReadFile(themeFile)
+	if err != nil {
+		return err
+	}
+	themeOut := filepath.Join(outputPath, "style.css")
+	return os.WriteFile(themeOut, themeData, fs.ModePerm)
+}
