@@ -4,14 +4,14 @@ import (
 	"html/template"
 )
 
-var data TemplData
-var sourceFile string
-var outputPath string
+var DATA TemplateData
+var INPUT_FILE string
+var OUTPUT_PATH string
+var SELECTED_THEME string
 
-type TemplData struct {
+type TemplateData struct {
 	Title       string
 	Langs       []string
 	Body        template.HTML
-	PageTheme   string
 	SyntaxTheme string
 }

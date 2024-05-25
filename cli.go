@@ -27,28 +27,28 @@ func run() {
 				Aliases:     []string{"i"},
 				Usage:       "render markdown `FILE` to HTML",
 				Value:       "README.md",
-				Destination: &sourceFile,
+				Destination: &INPUT_FILE,
 			},
 			&cli.StringFlag{
 				Name:        "output",
 				Aliases:     []string{"o"},
 				Usage:       "save output to `PATH`",
 				Value:       "docs",
-				Destination: &outputPath,
+				Destination: &OUTPUT_PATH,
 			},
 			&cli.StringFlag{
 				Name:        "title",
 				Aliases:     []string{"t"},
 				Usage:       "set output page title to `TITLE`",
 				Value:       cwd,
-				Destination: &data.Title,
+				Destination: &DATA.Title,
 			},
 			&cli.StringSliceFlag{
 				Name:    "lang",
 				Aliases: []string{"l"},
 				Usage:   "include syntax highlighting stylesheet for `LANG` (see Highlight.js for available languages)",
 				Action: func(ctx *cli.Context, s []string) error {
-					data.Langs = s
+					DATA.Langs = s
 					return nil
 				},
 			},
@@ -56,13 +56,13 @@ func run() {
 				Name:        "page-theme",
 				Usage:       "set CSS theme (see https://github.com/dogue/maredo/themes)",
 				Value:       "default",
-				Destination: &data.PageTheme,
+				Destination: &SELECTED_THEME,
 			},
 			&cli.StringFlag{
 				Name:        "syntax-theme",
 				Usage:       "set syntax highlighting theme (see Highlight.js for available themes)",
 				Value:       "github-dark",
-				Destination: &data.SyntaxTheme,
+				Destination: &DATA.SyntaxTheme,
 			},
 		},
 		Action: func(ctx *cli.Context) error {
@@ -72,7 +72,7 @@ func run() {
 
 			if err := renderPage(); err != nil {
 				if errors.Is(err, os.ErrNotExist) {
-					fmt.Printf("Could not locate file `%s`\n", sourceFile)
+					fmt.Printf("Could not locate file `%s`\n", INPUT_FILE)
 					os.Exit(1)
 				}
 
