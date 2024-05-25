@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/urfave/cli/v2"
 )
@@ -63,6 +64,26 @@ func run() {
 				Usage:       "set syntax highlighting theme (see Highlight.js for available themes)",
 				Value:       "github-dark",
 				Destination: &DATA.SyntaxTheme,
+			},
+			&cli.BoolFlag{
+				Name:  "list-themes",
+				Usage: "list built-in CSS themes",
+				Action: func(ctx *cli.Context, b bool) error {
+					themeList, err := THEMES.ReadDir("themes")
+					if err != nil {
+						return err
+					}
+
+					fmt.Printf("Available built-in themes:\n\n")
+
+					for _, theme := range themeList {
+						t := strings.TrimSuffix(theme.Name(), ".css")
+						fmt.Printf("  - %s\n", t)
+					}
+
+					os.Exit(0)
+					return nil
+				},
 			},
 		},
 		Action: func(ctx *cli.Context) error {
