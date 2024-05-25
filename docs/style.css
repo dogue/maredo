@@ -1,6 +1,6 @@
 body {
-	background: #0f0f0f;
-	color: #E0E0E0;
+	background: #f0f0f0;
+	color: #0e0e0e;
 	font-family: monospace;
 	font-size: 1.3em;
 	padding-left: 5%;
@@ -8,5 +8,5 @@ body {
 }
 
 a {
-	color: #e0e0e0;
+	color: #0e0e0e;
 }
