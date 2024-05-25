@@ -13,28 +13,27 @@ import (
 )
 
 //go:embed template.html
-var TEMPLATE_FILE string
-var TEMPLATE *template.Template
+var TEMPLATE string
 
 //go:embed themes/*
 var THEMES embed.FS
 
-func initTemplate() error {
-	TEMPLATE = template.New("maredo")
-	_, err := TEMPLATE.Parse(TEMPLATE_FILE)
-	return err
-}
-
 func renderPage() error {
-	file, err := os.ReadFile(INPUT_FILE)
+	t := template.New("maredo")
+	if _, err := t.Parse(TEMPLATE); err != nil {
+		return err
+	}
+
+	md, err := os.ReadFile(INPUT_FILE)
 	if err != nil {
 		return err
 	}
 
-	html := bf.Run(file)
+	html := bf.Run(md)
 	DATA.Body = template.HTML(html)
 	buf := bytes.Buffer{}
-	if err = TEMPLATE.Execute(&buf, DATA); err != nil {
+
+	if err = t.Execute(&buf, DATA); err != nil {
 		return err
 	}
 

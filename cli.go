@@ -92,10 +92,6 @@ func run() {
 			},
 		},
 		Action: func(ctx context.Context, cmd *cli.Command) error {
-			if err := initTemplate(); err != nil {
-				return err
-			}
-
 			if err := renderPage(); err != nil {
 				if errors.Is(err, os.ErrNotExist) {
 					fmt.Printf("Could not locate file `%s`\n", INPUT_FILE)
