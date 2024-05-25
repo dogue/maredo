@@ -56,13 +56,15 @@ func run() {
 			},
 			&cli.StringFlag{
 				Name:        "page-theme",
-				Usage:       "set CSS theme (see https://github.com/dogue/maredo/themes)",
+				Aliases:     []string{"p"},
+				Usage:       "set CSS theme to `THEME` or a custom CSS file (see --list-themes for built-in themes)",
 				Value:       "default",
 				Destination: &SELECTED_THEME,
 			},
 			&cli.StringFlag{
 				Name:        "syntax-theme",
-				Usage:       "set syntax highlighting theme (see Highlight.js for available themes)",
+				Aliases:     []string{"s"},
+				Usage:       "set syntax highlighting theme to `HJS_THEME` (see Highlight.js for available themes)",
 				Value:       "github-dark",
 				Destination: &DATA.SyntaxTheme,
 				Action: func(ctx context.Context, cmd *cli.Command, s string) error {
