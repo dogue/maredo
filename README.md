@@ -18,4 +18,4 @@ Maredo is not a fully-featured static site generator. It has a very narrow scope
 
 #### Contributing
 
-Issues and PRs are always welcome.
+Issues and PRs are always welcome. If you have a theme you'd like to add as a built-in, please open an issue and include a screenshot.
