@@ -69,8 +69,9 @@ func run() {
 				},
 			},
 			&cli.BoolFlag{
-				Name:  "list-themes",
-				Usage: "list built-in CSS themes",
+				Name:               "list-themes",
+				Usage:              "list built-in CSS themes",
+				DisableDefaultText: true,
 				Action: func(ctx *cli.Context, b bool) error {
 					themeList, err := THEMES.ReadDir("themes")
 					if err != nil {
