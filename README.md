@@ -1,4 +1,4 @@
-Maredo (pronounced like Laredo) is a very simple static site generator for rendering single-page HTML docs.
+Maredo (pronounced like Laredo) is a very simple static site generator for rendering single-page project docs.
 
 #### Features:
 
