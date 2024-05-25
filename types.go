@@ -6,6 +6,7 @@ import (
 
 var data TemplData
 var sourceFile string
+var outputFile string
 
 type TemplData struct {
 	Title       string

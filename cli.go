@@ -26,6 +26,13 @@ func initCli() cli.App {
 				Destination: &sourceFile,
 			},
 			&cli.StringFlag{
+				Name:        "output",
+				Aliases:     []string{"o"},
+				Usage:       "output rendered files to `PATH`",
+				Value:       "docs",
+				Destination: &outputFile,
+			},
+			&cli.StringFlag{
 				Name:        "title",
 				Aliases:     []string{"t"},
 				Usage:       "set output page title to `TITLE`",

@@ -13,22 +13,25 @@ import (
 var TEMPLATE string
 var compiledTempl *template.Template
 
+//go:embed themes/default.css
+var DEFAULT_CSS string
+
 func initTemplate() error {
 	compiledTempl = template.New("maredo")
 	_, err := compiledTempl.Parse(TEMPLATE)
 	return err
 }
 
-func renderPage(filename string, templData TemplData) (out string, err error) {
+func renderPage(filename string, templData TemplData) (out []byte, err error) {
 	file, err := os.ReadFile(filename)
 	if err != nil {
-		return "", err
+		return []byte{}, err
 	}
 	html := bf.Run(file)
 	templData.Body = template.HTML(html)
 	buf := bytes.Buffer{}
 	compiledTempl.Execute(&buf, templData)
-	return buf.String(), nil
+	return buf.Bytes(), nil
 }
 
 // func renderDir(dir string, templData TemplData)

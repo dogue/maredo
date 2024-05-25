@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"io/fs"
+	"os"
+	"path/filepath"
+)
 
 // "github.com/adrg/xdg"
 
@@ -11,5 +15,8 @@ func main() {
 	_ = app
 	initTemplate()
 	html, _ := renderPage(sourceFile, data)
-	fmt.Printf("%s\n", html)
+	out := filepath.Join(outputFile, "index.html")
+	os.WriteFile(out, html, fs.ModePerm)
+	outCss := filepath.Join(outputFile, "style.css")
+	os.WriteFile(outCss, []byte(DEFAULT_CSS), fs.ModePerm)
 }
